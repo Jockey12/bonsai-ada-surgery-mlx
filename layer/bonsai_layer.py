@@ -214,6 +214,7 @@ class Proxy(http.server.BaseHTTPRequestHandler):
     finish_note = True    # default for "finish_note": run-on-the-example sentence for coding requests (E15: adopted)
     repair_note = False   # default for "repair_note": a fixed sentence on failing tool results (E14 pending)
     input_file = True     # default for "input_file": the user's text as input.txt for run_python (E12: adopted)
+    reasoning_effort = None  # optional backend default, set by the Mac launcher
     protocol_version = "HTTP/1.1"
 
     def log_message(self, fmt, *a):
@@ -386,7 +387,18 @@ class Proxy(http.server.BaseHTTPRequestHandler):
         if self.api_key:
             given = self.headers.get("Authorization", "")
             if not hmac.compare_digest(given.encode("utf-8", "replace"), ("Bearer " + self.api_key).encode()):
-                return self._reply(*self._forward("POST", raw))   # let the server produce its own 401; do no work here
+                return self._reply(401, "application/json", b'{"error":{"message":"Unauthorized","type":"authentication_error"}}')
+        # Client-owned tools are pass-through by default (the measured E4 policy).
+        # Strip only layer-specific request controls; do not add cards or defaults.
+        if (body.get("tools") or []) and body.get("code_interpreter") is not True:
+            forwarded = dict(body)
+            for key in ("code_interpreter", "input_file", "repair_note", "finish_note", "api_cards", "api_lint",
+                        "interpreter_max_rounds", "final_mode"):
+                forwarded.pop(key, None)
+            payload = raw if forwarded == body else json.dumps(forwarded).encode()
+            if body.get("stream"):
+                return self._stream("POST", payload)
+            return self._reply(*self._forward("POST", payload))
         # a client that executes code blocks itself gets nothing changed (see client_runs_code)
         if not (body.get("tools") or []) and client_runs_code(body.get("messages") or []) \
                 and body.get("code_interpreter") is not True:
@@ -416,6 +428,8 @@ class Proxy(http.server.BaseHTTPRequestHandler):
             self.log_message("preprocess failed: %r", e)
             msgs0 = list(body.get("messages") or [])
         body["messages"] = msgs0
+        if self.reasoning_effort and "reasoning_effort" not in body:
+            body["reasoning_effort"] = self.reasoning_effort
         client_tools = body.get("tools") or []
         # Default: offer the interpreter only to requests without client tools. Measured (E4): with client tools the
         # data lives in paginated tool results, the model must retype it into code, and transcription errors cost
@@ -486,6 +500,8 @@ if __name__ == "__main__":
     ap.add_argument("--no-finish-note", action="store_true", help="do not append the run-on-the-example sentence to coding requests")
     ap.add_argument("--repair-note", action="store_true", help="append a fixed sentence to failing tool results by default")
     ap.add_argument("--no-input-file", action="store_true", help="do not give run_python the user's text as input.txt")
+    ap.add_argument("--reasoning-effort", choices=("medium", "low", "xhigh"), default=os.environ.get("BONSAI_REASONING_EFFORT"),
+                    help="default reasoning effort to add when the request does not specify one")
     a = ap.parse_args()
     Proxy.api_key = os.environ.get("BONSAI_LAYER_KEY") or None
     Proxy.upstream, Proxy.max_rounds = a.upstream, a.max_rounds
@@ -493,6 +509,7 @@ if __name__ == "__main__":
     Proxy.input_file = not a.no_input_file
     Proxy.repair_note = a.repair_note
     Proxy.finish_note = not a.no_finish_note
+    Proxy.reasoning_effort = a.reasoning_effort
     srv = http.server.ThreadingHTTPServer((a.host, a.port), Proxy)
     print(f"bonsai layer on {a.host}:{a.port} -> {a.upstream}", flush=True)
     srv.serve_forever()
