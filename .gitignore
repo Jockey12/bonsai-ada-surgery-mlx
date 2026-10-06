@@ -54,5 +54,7 @@ __pycache__/
 
 # Bonsai layer: downloaded sandbox runtime and caches
 layer/runtime/
+layer/.venv/
+/.venv-vlm/
 layer/apicards-cache.json
 layer/apicards-v2-cache.json

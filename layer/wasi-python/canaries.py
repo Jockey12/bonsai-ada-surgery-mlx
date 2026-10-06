@@ -1,8 +1,13 @@
 """Canary checks: the sandbox must allow ordinary computation and deny everything else."""
 import json
+import os
+import tempfile
 import sandbox
 
-KEYFILE = r"C:\Users\pwall\Projects\bonsai-2-27b-serve\artifacts\api_key.txt"
+_keyfile = tempfile.NamedTemporaryFile(prefix="bonsai-api-key-", delete=False)
+KEYFILE = _keyfile.name
+_keyfile.write(b"host secret must not be visible to WASI")
+_keyfile.close()
 C = {
     "hello": ("print('hi', 6*7)", lambda r: r["exit_code"] == 0 and r["stdout"].strip() == b"hi 42"),
     "stdin_json": ("import json,sys; d=json.load(sys.stdin); print(json.dumps({'n': d['x']+1}))",
@@ -16,11 +21,11 @@ C = {
                       lambda r: r["stdout"].strip() == b"ok" and r["files_after"].get("out.txt") == b"ok"),
     "relative_paths": ("open('note.txt','w').write('x'); import os; print(open('note.txt').read(), os.path.exists('main.py'), sorted(os.listdir('.')))",
                        lambda r: r["exit_code"] == 0 and r["stdout"].startswith(b"x True") and b"Users" not in r["stdout"]),
-    "relative_escape_denied": ("print(open('../../../../Windows/win.ini').read())", lambda r: r["exit_code"] != 0),
+    "relative_escape_denied": ("print(open('../../../../etc/passwd').read())", lambda r: r["exit_code"] != 0),
     "host_key_denied": (f"print(open({KEYFILE!r}).read())", lambda r: r["exit_code"] != 0 and b"Error" in r["stderr"]),
     "host_root_denied": ("import os; print(os.listdir('/'))",
                          lambda r: b"Users" not in r["stdout"] and b"Windows" not in r["stdout"]),
-    "parent_escape_denied": ("print(open('/work/../../../../Windows/win.ini').read())",
+    "parent_escape_denied": ("print(open('/work/../../../../etc/passwd').read())",
                              lambda r: r["exit_code"] != 0),
     "lib_readonly": ("open('/usr/local/lib/python3.12/evil.py','w').write('x')", lambda r: r["exit_code"] != 0),
     "network_denied": ("import socket; s=socket.create_connection(('1.1.1.1',80),timeout=2); print('CONNECTED')",
@@ -36,4 +41,5 @@ for name, (code, check) in C.items():
     passed = bool(check(r))
     ok &= passed
     print(f"{'PASS' if passed else 'FAIL'} {name:22s} exit={r['exit_code']} out={r['stdout'][:60]!r} err={r['stderr'][-120:]!r}")
+os.unlink(KEYFILE)
 print("ALL PASS" if ok else "SOME FAILED")

@@ -8,7 +8,7 @@ import json
 import os
 import re
 
-import sandbox_path  # noqa: F401  (puts tooling/wasi-python on sys.path)
+import sandbox_path  # noqa: F401  (puts layer/wasi-python on sys.path)
 import sandbox
 
 HERE = os.path.dirname(os.path.abspath(__file__))

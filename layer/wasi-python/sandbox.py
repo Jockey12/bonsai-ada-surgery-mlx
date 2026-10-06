@@ -16,7 +16,7 @@ import wasmtime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # VMware Labs CPython 3.12.0 WASI build (zlib compiled in), sha256 6c1cddbb... of the release tarball
-RT = os.path.join(os.path.dirname(HERE), "runtime")   # created by layer/fetch_runtime.ps1
+RT = os.path.join(os.path.dirname(HERE), "runtime")   # created by setup_mac.sh / fetch_runtime.ps1
 PYWASM = os.path.join(RT, "bin", "python-3.12.0.wasm")
 LIB = os.path.join(RT, "usr", "local", "lib")
 
@@ -94,6 +94,7 @@ def run(files, argv, stdin=b"", timeout=8.0, mem_mb=128, max_out=1 << 20):
             for n in names:
                 full = os.path.join(root, n)
                 if os.path.getsize(full) <= 4 << 20:
+                    # Use POSIX separators in returned sandbox paths on every host OS.
                     after[os.path.relpath(full, work).replace("\\", "/")] = open(full, "rb").read()
         return {"exit_code": code, "stdout": out, "stderr": err, "timed_out": timed_out, "files_after": after}
     finally:
