@@ -1,6 +1,6 @@
 # Bonsai 2 27B: the full 262k window at q8_0 on a 12 GB card
 
-![Scorecard: 262k window at q8_0, 100 tok/s at 32k, HumanEval 161/164, effort "high" 0 to 160](docs/img/summary.png)
+![Scorecard: same weights, the serve changed: 262k at q8_0, 100 tok/s at 32k, effort "high" 0 to 160, AppWorld 64.3 to 70.8%, suite 17 to 28, AIME 52 to 56](docs/img/launch.png)
 
 The model's **full 262,144-token trained window with q8_0 KV cache on a 12 GB RTX 4070**, and the
 speed and serving recipe that make that window usable. Patched [PrismML llama.cpp](https://github.com/PrismML-Eng/llama.cpp)
@@ -30,6 +30,13 @@ number in this repo since #221), display on the CPU's iGPU. What those numbers r
 | KV precision at 262k | q4_0: 1 flipped top token in 48 | q8_0: **1 in 160** |
 | apps that send `effort: "high"` | HTTP 500 on every request | answered (normalized to medium) |
 | apps with a 256-4096 token cap, thinking on | cut off mid-think | answered (cap raised to the think budget) |
+| HumanEval 164 from apps that send `effort: "high"` | 0 (HTTP 500) | **160** |
+| tool calls parsed (9 requests) | 1 of 9 (JSON asked for in content) | **9 of 9** (native XML, server grammar) |
+| AppWorld, all 168 test tasks, ReAct code agent | 64.3% on the stock fork (published, 2.13-bpw file); 16 wrong-format replies, 15 step-cap exits | **70.8%** (95% CI 63.6-77.2); **1 and 1** |
+| long exact-work suite, 37 tasks, same seeds | 17 raw | **28** behind the layer (13 rescues, 2 losses); 29 on a second seed set |
+| AIME 2025 (60) / MMLU-Pro (100), raw -> layer | 52 / 71 | **56** / **76** |
+
+![Agentic work before and after: AppWorld completion and failure classes, tool-call parsing, effort-high replay, library coding with the layer](docs/img/agentic.png)
 
 ![Decode by context depth: this bundle vs the previous recipe](docs/img/decode.png)
 
