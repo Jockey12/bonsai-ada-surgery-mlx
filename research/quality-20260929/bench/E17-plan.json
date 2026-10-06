@@ -1,0 +1,72 @@
+{
+ "id": "E17-email-delegation-card-v1",
+ "question": "does carding the delegate module (email.contentmanager, the real signatures behind EmailMessage.set_content/add_attachment) rescue the MIME task where cards did nothing (E11 0/6, E15 0/6)?",
+ "arms": {
+  "C2P": "harness, old card generator (tooling/apicards_v2: email.message card with (*args, **kw) methods)",
+  "C2PL": "harness, layer/apicards_v2 with DELEGATES: email.message followed by email.contentmanager"
+ },
+ "tasks": "xfer-mime-01 seeds 221-226 (12 runs), direct to :18080",
+ "gate": "adopt DELEGATES if C2PL has >= 2 rescues and 0 losses vs C2P",
+ "order": [
+  [
+   "xfer-mime-01",
+   221,
+   "C2P"
+  ],
+  [
+   "xfer-mime-01",
+   221,
+   "C2PL"
+  ],
+  [
+   "xfer-mime-01",
+   222,
+   "C2PL"
+  ],
+  [
+   "xfer-mime-01",
+   222,
+   "C2P"
+  ],
+  [
+   "xfer-mime-01",
+   223,
+   "C2P"
+  ],
+  [
+   "xfer-mime-01",
+   223,
+   "C2PL"
+  ],
+  [
+   "xfer-mime-01",
+   224,
+   "C2PL"
+  ],
+  [
+   "xfer-mime-01",
+   224,
+   "C2P"
+  ],
+  [
+   "xfer-mime-01",
+   225,
+   "C2P"
+  ],
+  [
+   "xfer-mime-01",
+   225,
+   "C2PL"
+  ],
+  [
+   "xfer-mime-01",
+   226,
+   "C2PL"
+  ],
+  [
+   "xfer-mime-01",
+   226,
+   "C2P"
+  ]
+ ]
+}

@@ -1,0 +1,58 @@
+# weights
+models/
+*.gguf
+
+# built / downloaded binaries
+bin/
+tooling/
+tmp/
+vendor/
+*.exe
+*.dll
+*.lib
+*.exp
+*.obj
+*.pdb
+*.zip
+
+# local state, secrets, raw traces
+artifacts/*
+!artifacts/receipt_*.json
+!artifacts/receipt_*.log
+!artifacts/core_sweep.txt
+!artifacts/depth_sweep_summary.md
+.codegraph/
+__pycache__/
+*.pyc
+!artifacts/h2h_*.json
+!artifacts/h2h_*.log
+# quality / served-depth receipts cited by docs (small text); datasets and KL bins stay out
+!artifacts/eval/
+artifacts/eval/*
+!artifacts/eval/kl_*.log
+!artifacts/eval/served_*.txt
+!artifacts/eval/toolcall_stress.json
+!artifacts/eval/tc_*.json
+!artifacts/eval/mtp_head_ab.json
+!artifacts/eval/killy_*/
+!artifacts/eval/final_sweep_*.txt
+!artifacts/eval/run_final_*.log
+!artifacts/eval/run_final_*.ps1
+!artifacts/eval/control_*.ps1
+!artifacts/eval/control_*_2026*.log
+!artifacts/eval/pagoda_*_20260927/
+
+# sandbox runtime binaries and caches (tooling/wasi-python/fetch_runtime.ps1 re-creates them)
+tooling/wasi-python312/
+tooling/wasi-python/python.wasm
+tooling/wasi-python/python-wasi.zip
+tooling/wasi-python/lib/
+tooling/wasi-python/LICENSE
+tooling/apicards-cache.json
+bin-rc*/
+__pycache__/
+
+# Bonsai layer: downloaded sandbox runtime and caches
+layer/runtime/
+layer/apicards-cache.json
+layer/apicards-v2-cache.json

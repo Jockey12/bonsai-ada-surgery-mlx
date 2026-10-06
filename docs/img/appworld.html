@@ -1,0 +1,65 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>AppWorld on this serve</title>
+<!-- 1200x675 share card, dark. Rendered at 2x into docs/img/appworld.png. Numbers: research/quality-20260929/REPORT.md round 13. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root { --bg:#0E1512; --panel:#152019; --line:#223129; --ink:#F2F6F1; --muted:#9FB3A7; --dim:#5C6E64; --before:#6B7A72; --after:#3CDB8A; --after2:#8EF0BE; --amber:#F3B94A; --ref:#3F5160;
+  --display:"IBM Plex Sans Condensed",Arial,sans-serif; --body:"IBM Plex Sans","Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono",Consolas,monospace; }
+html,body{margin:0;width:1200px;height:675px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--body);}
+.card{box-sizing:border-box;width:1200px;height:675px;padding:30px 56px 20px;display:flex;flex-direction:column;gap:8px;}
+.eyebrow{font-family:var(--mono);font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+h1{margin:0;font-family:var(--display);font-size:44px;line-height:1.02;font-weight:700;}
+h1 b{color:var(--after);font-weight:700;}
+.sub{margin:0;font-size:17px;color:var(--muted);}
+.grid{flex:1;display:grid;grid-template-columns:1.3fr 1fr;gap:22px;min-height:0;margin-top:4px;}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;gap:10px;}
+.panel h2{margin:0 0 2px;font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;}
+.rows{display:grid;grid-template-columns:190px 1fr 92px;gap:10px 12px;align-items:center;}
+.lab{font-size:15px;font-weight:600;line-height:1.15;}
+.lab small{display:block;font-weight:400;font-size:12px;color:var(--muted);}
+.track{background:#1C2A22;border-radius:4px;height:22px;position:relative;}
+.bar{height:22px;border-radius:4px;}
+.ref{background:var(--ref);} .ours{background:linear-gradient(90deg,var(--after),var(--after2));} .mir{background:#5C7A8F;} .bf{background:#8A98A3;}
+.ci{position:absolute;top:8px;height:6px;border-left:2px solid #fff;border-right:2px solid #fff;opacity:.9;}
+.num{font-family:var(--mono);font-size:17px;text-align:right;font-weight:600;}
+.num.g{color:var(--after);} .num.m{color:var(--muted);font-weight:500;}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.chip{background:#0F1A14;border:1px solid var(--line);border-radius:10px;padding:8px 12px;}
+.chip .t{font-size:12.5px;color:var(--muted);font-family:var(--mono);}
+.chip .v{font-family:var(--display);font-size:27px;font-weight:700;color:var(--after);line-height:1.05;margin-top:2px;}
+.chip .v.n{color:var(--ink);}
+.chip .d{font-size:12px;color:var(--muted);margin-top:2px;}
+.note{font-size:13.5px;color:var(--muted);line-height:1.4;}
+.note b{color:var(--ink);font-weight:600;}
+.foot{display:flex;justify-content:space-between;gap:16px;font-family:var(--mono);font-size:12px;color:var(--dim);border-top:1px solid var(--line);padding-top:8px;}
+.foot b{color:var(--muted);font-weight:500;}
+</style>
+<div class="card">
+  <div class="eyebrow">AppWorld · test_normal · 168 tasks · ReAct code agent · 50 steps · 1 pass · one RTX 4070 12 GB</div>
+  <h1>The smaller Bonsai file, served right, scores <b>70.8%</b> on AppWorld.</h1>
+  <p class="sub">Bonsai 2 27B at 1.75 bpw (5.95 GB) on this repo's server, medium thinking by design. No layer involved: the agent runs its own code, the server just answers.</p>
+  <div class="grid">
+    <div class="panel">
+      <h2>Task goal completion</h2>
+      <div class="rows">
+        <div class="lab">Bonsai 2 · 1.75 bpw<small>this serve · 95% CI 63.6–77.2</small></div>
+        <div class="track"><div class="bar ours" style="width:70.8%"></div><div class="ci" style="left:63.6%;width:13.6%"></div></div><div class="num g">70.8%</div>
+        <div class="lab">Bonsai 2 · 2.13 bpw<small>public run · stock fork · max thinking</small></div>
+        <div class="track"><div class="bar ref" style="width:64.3%"></div></div><div class="num m">64.3%</div>
+      </div>
+      <div class="note"><b>By difficulty, this serve:</b> easy 93.0% · medium 58.3% · hard 60.3% (public Bonsai figure: 86 / 52 / 54). Pre-declared gate: "matches the public figure" is met; "exceeds" needs the interval's lower bound above 64.3 and it lands at 63.6, so we say <b>at or above</b>, not above.</div>
+    </div>
+    <div class="panel">
+      <h2>Where the failures went</h2>
+      <div class="chips">
+        <div class="chip"><div class="t">wrong format (tool-call text, no python)</div><div class="v">16 → 1</div><div class="d">public Bonsai run → this serve</div></div>
+        <div class="chip"><div class="t">died at the 50-step cap</div><div class="v">15 → 1</div><div class="d">public Bonsai run → this serve</div></div>
+        <div class="chip"><div class="t">failures in total</div><div class="v n">60 → 49</div><div class="d">of 168</div></div>
+        <div class="chip"><div class="t">scenario completion (all 3 variants)</div><div class="v n">46.4%</div><div class="d">public Bonsai figure 37.5%</div></div>
+      </div>
+      <div class="note">The two failure classes the public analysis attributed to <b>serving</b> are gone (31 of 60 there, 2 of 49 here): grammar-constrained tool syntax and the medium recipe did that. The 47 that remain are the model doing the wrong thing in the right format, and this serve's layer does not touch agents that run their own code.</div>
+    </div>
+  </div>
+  <div class="foot"><span>our run: appworld 0.2.0 from source, seed 100, temp 1.0, one pass, 2 h 38 min · public Bonsai figure from the external 4x3090 run (PQ2_0 on the stock fork), not reproduced here · logs in the repo</span><span><b>professorpalmer/bonsai-ada-surgery</b></span></div>
+</div>

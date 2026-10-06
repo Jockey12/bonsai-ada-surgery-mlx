@@ -1,0 +1,22 @@
+== E17 complete, AW2 starts 01:41
+== bonsai-raw run start 01:41
+difficulty_1 |         93.0         |           89.5          
+difficulty_2 |         58.3         |           18.8          
+difficulty_3 |         60.3         |           28.6          
+
+Json evaluation report saved in: .\experiments\outputs\simplified_react_code_agent/bonsai_local/bonsai-raw/test_normal\evaluations\test_normal.json
+
+Text evaluation report saved in: .\experiments\outputs\simplified_react_code_agent/bonsai_local/bonsai-raw/test_normal\evaluations\test_normal.txt
+
+Text Evaluation Report:
+    type     | task_goal_completion | scenario_goal_completion
+-------------+----------------------+-------------------------
+ aggregate   |         70.8         |           46.4          
+difficulty_1 |         93.0         |           89.5          
+difficulty_2 |         58.3         |           18.8          
+difficulty_3 |         60.3         |           28.6          
+
+== bonsai-raw done 04:19
+health(8080)=True
+C:\Users\pwall\Projects\bonsai-2-27b-serve\models\Ternary-Bonsai-2-27B-PTQ1_0-mtp-procreations.gguf
+== AW2 done, product serve restored 04:19

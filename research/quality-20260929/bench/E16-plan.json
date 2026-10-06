@@ -1,0 +1,118 @@
+{
+ "id": "E16-cap-then-nudge-v1",
+ "question": "the only loss mechanism seen (AIME 29, both seeds): the tool loop runs to its round cap and the final nudge forces a wrong answer. Does a higher cap or a reasoning-oriented final message fix it without breaking the cap problems the loop currently wins?",
+ "arms": {
+  "CAP8": "shipped layer (8 rounds + FINAL_NUDGE); seeds 1001/1002 reuse A1/A1b PROD results",
+  "CAP12": "interpreter_max_rounds 12",
+  "REASON": "8 rounds + FINAL_REASON (set the numeric exploration aside, reason from first principles)"
+ },
+ "tasks": "AIME 2025 problems 13, 14, 29 (the three that hit the cap on both seeds) x seeds 1001-1003",
+ "gate": "adopt a variant if over the 9 (problem, seed) cells it loses no cell that CAP8 wins and wins problem 29 in >= 2 of 3 seeds; ties go to the shipped default",
+ "order": [
+  [
+   13,
+   1001,
+   "CAP12"
+  ],
+  [
+   13,
+   1001,
+   "REASON"
+  ],
+  [
+   14,
+   1001,
+   "CAP12"
+  ],
+  [
+   14,
+   1001,
+   "REASON"
+  ],
+  [
+   29,
+   1001,
+   "CAP12"
+  ],
+  [
+   29,
+   1001,
+   "REASON"
+  ],
+  [
+   13,
+   1002,
+   "CAP12"
+  ],
+  [
+   13,
+   1002,
+   "REASON"
+  ],
+  [
+   14,
+   1002,
+   "CAP12"
+  ],
+  [
+   14,
+   1002,
+   "REASON"
+  ],
+  [
+   29,
+   1002,
+   "CAP12"
+  ],
+  [
+   29,
+   1002,
+   "REASON"
+  ],
+  [
+   13,
+   1003,
+   "CAP8"
+  ],
+  [
+   13,
+   1003,
+   "CAP12"
+  ],
+  [
+   13,
+   1003,
+   "REASON"
+  ],
+  [
+   14,
+   1003,
+   "CAP8"
+  ],
+  [
+   14,
+   1003,
+   "CAP12"
+  ],
+  [
+   14,
+   1003,
+   "REASON"
+  ],
+  [
+   29,
+   1003,
+   "CAP8"
+  ],
+  [
+   29,
+   1003,
+   "CAP12"
+  ],
+  [
+   29,
+   1003,
+   "REASON"
+  ]
+ ]
+}
