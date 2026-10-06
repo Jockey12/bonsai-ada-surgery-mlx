@@ -127,8 +127,6 @@ Then send the API examples above. A coding request should return a normal answer
 
 The current Mac setup was exercised on arm64 macOS with Python 3.12. The WASI runtime checksum matched and all 14 isolation canaries passed. With `mlx-vlm 0.7.2`, the local LM Studio Bonsai 2 MLX pack loaded successfully; its Qwen3-Coder-style XML tool calls were returned as parsed OpenAI `tool_calls`. Real requests through the layer completed a sandboxed `print(6*7)` and returned `42`, in both non-streaming and streaming modes.
 
-For the original CUDA research, patch stack, and benchmark reports, see [`research/quality-20260929/REPORT.md`](research/quality-20260929/REPORT.md). Those NVIDIA results are not Mac performance measurements.
-
 ## License
 
 This repository is MIT-licensed. The Bonsai model pack has its own license and terms; consult the [model card](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-mlx-2bit) before using or redistributing the weights.
